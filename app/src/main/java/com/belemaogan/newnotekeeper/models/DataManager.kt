@@ -4,7 +4,7 @@ package com.belemaogan.newnotekeeper.models
  * Created by Belema Ogan on 2/21/2019.
  */
 class DataManager {
-    private val courses = HashMap<String, CourseInfo>()
+    val courses = HashMap<String, CourseInfo>()
     val notes = ArrayList<NoteInfo>()
 
     init {
