@@ -45,7 +45,6 @@ class MainView(inflater: LayoutInflater, parent: ViewGroup?){
             Snackbar.make(view, "Value $originalValue changed to $newValue", Snackbar.LENGTH_LONG).show()
         }
 
-
     }
 
     private fun <T: View> findViewById(id: Int): T {
