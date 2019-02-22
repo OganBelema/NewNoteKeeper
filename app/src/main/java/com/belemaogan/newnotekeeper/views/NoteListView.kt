@@ -24,7 +24,7 @@ class NoteListView(inflater: LayoutInflater, parent: ViewGroup?) {
 
     val mToolbar: Toolbar
     private val mEditNoteButton: FloatingActionButton
-    private val mNoteListView: ListView
+    val mNoteListView: ListView
     private val mListeners = ArrayList<Listener>()
 
     fun registerListener(listener: Listener){

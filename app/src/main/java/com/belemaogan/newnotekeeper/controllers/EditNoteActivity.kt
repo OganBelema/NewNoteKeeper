@@ -8,8 +8,10 @@ import android.view.MenuItem
 import android.widget.ArrayAdapter
 import com.belemaogan.newnotekeeper.R
 import com.belemaogan.newnotekeeper.DataManager
-import com.belemaogan.newnotekeeper.EXTRA_NOTE_POSITION
+import com.belemaogan.newnotekeeper.NOTE_POSITION
 import com.belemaogan.newnotekeeper.POSITION_NOT_SET
+import com.belemaogan.newnotekeeper.models.CourseInfo
+import com.belemaogan.newnotekeeper.models.NoteInfo
 import com.belemaogan.newnotekeeper.views.EditNoteView
 
 
@@ -32,10 +34,14 @@ class EditNoteActivity : AppCompatActivity() {
 
         mEditNoteView.populateCourseSpinner(adapterCourses)
 
-        mNotePosition = intent.getIntExtra(EXTRA_NOTE_POSITION, POSITION_NOT_SET)
+        mNotePosition = savedInstanceState?.getInt(NOTE_POSITION, POSITION_NOT_SET) ?:
+                intent.getIntExtra(NOTE_POSITION, POSITION_NOT_SET)
 
         if (mNotePosition != POSITION_NOT_SET) {
             displayNote()
+        } else {
+            DataManager.notes.add(NoteInfo())
+            mNotePosition = DataManager.notes.lastIndex
         }
 
         setContentView(mEditNoteView.mRootView)
@@ -83,6 +89,23 @@ class EditNoteActivity : AppCompatActivity() {
         mNotePosition++
         displayNote()
         invalidateOptionsMenu()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        saveNote()
+    }
+
+    private fun saveNote() {
+        val note = DataManager.notes[mNotePosition]
+        note.title = mEditNoteView.mNoteTitleEditText.text.toString()
+        note.text = mEditNoteView.mNoteTextEditText.text.toString()
+        note.course = mEditNoteView.mCourseSpinner.selectedItem as CourseInfo
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState?.putInt(NOTE_POSITION, mNotePosition)
     }
 
 }

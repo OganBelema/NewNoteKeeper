@@ -18,9 +18,9 @@ class EditNoteView(inflater: LayoutInflater, parent: ViewGroup?){
     val mRootView: View = inflater.inflate(R.layout.activity_edit_note, parent, false)
 
     val mToolbar: Toolbar
-    private val mCourseSpinner: Spinner
-    private val mNoteTitleEditText: EditText
-    private val mNoteTextEditText: EditText
+    val mCourseSpinner: Spinner
+    val mNoteTitleEditText: EditText
+    val mNoteTextEditText: EditText
 
     init {
         mToolbar = findViewById(R.id.toolbar)
@@ -37,10 +37,10 @@ class EditNoteView(inflater: LayoutInflater, parent: ViewGroup?){
         mCourseSpinner.adapter = adapterCourses
     }
 
-    fun populateView(coursePosition: Int, title: String, text: String) {
+    fun populateView(coursePosition: Int, title: String?, text: String?) {
         mCourseSpinner.setSelection(coursePosition)
-        mNoteTitleEditText.setText(title)
-        mNoteTextEditText.setText(text)
+        mNoteTitleEditText.setText(title?:"No Title")
+        mNoteTextEditText.setText(text?:"No Text")
     }
 
 }

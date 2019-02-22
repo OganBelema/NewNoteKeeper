@@ -6,7 +6,8 @@ import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.widget.ArrayAdapter
 import com.belemaogan.newnotekeeper.DataManager
-import com.belemaogan.newnotekeeper.EXTRA_NOTE_POSITION
+import com.belemaogan.newnotekeeper.NOTE_POSITION
+import com.belemaogan.newnotekeeper.models.NoteInfo
 import com.belemaogan.newnotekeeper.views.NoteListView
 
 class NoteListActivity : AppCompatActivity(), NoteListView.Listener {
@@ -36,10 +37,15 @@ class NoteListActivity : AppCompatActivity(), NoteListView.Listener {
 
     override fun onNoteListItemClicked(position: Int) {
         val activityIntent = Intent(this, EditNoteActivity::class.java)
-        //the key EXTRA_NOTE_POSITION is from my Constant file, it helps to prevent me from making
+        //the key NOTE_POSITION is from my Constant file, it helps to prevent me from making
         //an error in the spelling which will introduce bugs
-        activityIntent.putExtra(EXTRA_NOTE_POSITION, position)
+        activityIntent.putExtra(NOTE_POSITION, position)
         startActivity(activityIntent)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (mNoteListView.mNoteListView.adapter as ArrayAdapter<NoteInfo>).notifyDataSetChanged()
     }
 
     override fun onDestroy() {
