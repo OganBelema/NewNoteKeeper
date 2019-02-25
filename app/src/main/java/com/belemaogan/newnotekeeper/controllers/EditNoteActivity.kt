@@ -2,6 +2,7 @@ package com.belemaogan.newnotekeeper.controllers
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
@@ -17,6 +18,8 @@ import com.belemaogan.newnotekeeper.views.EditNoteView
 
 
 class EditNoteActivity : AppCompatActivity() {
+
+    private val mTag = "EditNoteActivity"
 
     private lateinit var mEditNoteView: EditNoteView
 
@@ -40,18 +43,29 @@ class EditNoteActivity : AppCompatActivity() {
         if (mNotePosition != POSITION_NOT_SET) {
             displayNote()
         } else {
-            DataManager.notes.add(NoteInfo())
-            mNotePosition = DataManager.notes.lastIndex
+            createNewNote()
         }
+
+        Log.d(mTag, "onCreate")
 
         setContentView(mEditNoteView.mRootView)
     }
 
+    private fun createNewNote() {
+        DataManager.notes.add(NoteInfo())
+        mNotePosition = DataManager.notes.lastIndex
+    }
+
     private fun displayNote() {
         if (mNotePosition > DataManager.notes.lastIndex){
-            mEditNoteView.showMessageWithSnakbar("Note not found")
+            val message = "Note not found"
+            mEditNoteView.showMessageWithSnakbar(message)
+            Log.e(mTag, "Invalid note position $mNotePosition, max valid position is ${DataManager.notes.lastIndex}")
             return
         }
+
+        Log.i(mTag, "displaying note for position: $mNotePosition")
+
         val note = DataManager.notes[mNotePosition]
         val coursePosition = DataManager.courses.values.indexOf(note.course)
         mEditNoteView.populateView(coursePosition, note.title, note.text)
@@ -84,7 +98,8 @@ class EditNoteActivity : AppCompatActivity() {
                 if (mNotePosition < DataManager.notes.lastIndex) {
                     moveNext()
                 } else {
-                    mEditNoteView.showMessageWithSnakbar("No more notes")
+                    val message = "No more notes"
+                    mEditNoteView.showMessageWithSnakbar(message)
                 }
                 return true
             }
@@ -101,6 +116,7 @@ class EditNoteActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         saveNote()
+        Log.d(mTag, "onPause")
     }
 
     private fun saveNote() {
