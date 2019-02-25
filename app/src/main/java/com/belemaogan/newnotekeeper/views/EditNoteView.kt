@@ -1,5 +1,6 @@
 package com.belemaogan.newnotekeeper.views
 
+import android.support.design.widget.Snackbar
 import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
@@ -41,6 +42,10 @@ class EditNoteView(inflater: LayoutInflater, parent: ViewGroup?){
         mCourseSpinner.setSelection(coursePosition)
         mNoteTitleEditText.setText(title?:"No Title")
         mNoteTextEditText.setText(text?:"No Text")
+    }
+
+    fun showMessageWithSnakbar(message: String){
+        Snackbar.make(mRootView, message, Snackbar.LENGTH_LONG).show()
     }
 
 }

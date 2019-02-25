@@ -48,6 +48,10 @@ class EditNoteActivity : AppCompatActivity() {
     }
 
     private fun displayNote() {
+        if (mNotePosition > DataManager.notes.lastIndex){
+            mEditNoteView.showMessageWithSnakbar("Note not found")
+            return
+        }
         val note = DataManager.notes[mNotePosition]
         val coursePosition = DataManager.courses.values.indexOf(note.course)
         mEditNoteView.populateView(coursePosition, note.title, note.text)
@@ -58,7 +62,6 @@ class EditNoteActivity : AppCompatActivity() {
             val menuItem = menu?.findItem(R.id.action_next)
             if (menuItem != null){
                 menuItem.icon = resources.getDrawable(R.drawable.ic_block_white_24dp)
-                menuItem.isEnabled = false
             }
 
         }
@@ -78,7 +81,11 @@ class EditNoteActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.action_settings -> true
             R.id.action_next -> {
-                moveNext()
+                if (mNotePosition < DataManager.notes.lastIndex) {
+                    moveNext()
+                } else {
+                    mEditNoteView.showMessageWithSnakbar("No more notes")
+                }
                 return true
             }
             else -> super.onOptionsItemSelected(item)
