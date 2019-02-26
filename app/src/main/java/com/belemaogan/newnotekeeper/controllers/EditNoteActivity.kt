@@ -19,7 +19,7 @@ import com.belemaogan.newnotekeeper.views.EditNoteView
 
 class EditNoteActivity : AppCompatActivity() {
 
-    private val mTag = "EditNoteActivity"
+    private val mTag = this::class.simpleName
 
     private lateinit var mEditNoteView: EditNoteView
 
