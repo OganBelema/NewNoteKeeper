@@ -45,7 +45,7 @@ class NoteListActivity : AppCompatActivity(), NoteListView.Listener {
 
     override fun onResume() {
         super.onResume()
-        (mNoteListView.mNoteListView.adapter as ArrayAdapter<NoteInfo>).notifyDataSetChanged()
+        (mNoteListView.mNoteListView.adapter as ArrayAdapter<*>).notifyDataSetChanged()
     }
 
     override fun onDestroy() {

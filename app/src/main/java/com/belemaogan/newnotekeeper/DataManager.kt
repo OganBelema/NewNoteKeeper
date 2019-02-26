@@ -66,4 +66,11 @@ object DataManager {
                 "Remember to include SerialVersionUID to assure version compatibility")
         notes.add(note)
     }
+
+    fun createNewNote(course: CourseInfo, noteTitle: String, noteText: String): Int {
+        val newNote = NoteInfo(course = course, title = noteTitle, text = noteText)
+        DataManager.notes.add(newNote)
+        return DataManager.notes.indexOf(newNote)
+    }
+
 }

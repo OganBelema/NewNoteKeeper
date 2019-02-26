@@ -59,7 +59,7 @@ class EditNoteActivity : AppCompatActivity() {
     private fun displayNote() {
         if (mNotePosition > DataManager.notes.lastIndex){
             val message = "Note not found"
-            mEditNoteView.showMessageWithSnakbar(message)
+            mEditNoteView.showMessageWithSnackbar(message)
             Log.e(mTag, "Invalid note position $mNotePosition, max valid position is ${DataManager.notes.lastIndex}")
             return
         }
@@ -99,7 +99,7 @@ class EditNoteActivity : AppCompatActivity() {
                     moveNext()
                 } else {
                     val message = "No more notes"
-                    mEditNoteView.showMessageWithSnakbar(message)
+                    mEditNoteView.showMessageWithSnackbar(message)
                 }
                 return true
             }

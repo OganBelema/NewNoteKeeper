@@ -44,7 +44,7 @@ class EditNoteView(inflater: LayoutInflater, parent: ViewGroup?){
         mNoteTextEditText.setText(text?:"No Text")
     }
 
-    fun showMessageWithSnakbar(message: String){
+    fun showMessageWithSnackbar(message: String){
         Snackbar.make(mRootView, message, Snackbar.LENGTH_LONG).show()
     }
 
