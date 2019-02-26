@@ -29,7 +29,7 @@ object DataManager {
         courses[course.courseId] = course
     }
 
-    private fun initialiseNotes(){
+    fun initialiseNotes(){
         var course = courses["android_intents"]!!
         var note = NoteInfo(course, "Dynamic intent resolution",
                 "Wow, intents allow components to be resolved at runtime")
@@ -71,6 +71,15 @@ object DataManager {
         val newNote = NoteInfo(course = course, title = noteTitle, text = noteText)
         DataManager.notes.add(newNote)
         return DataManager.notes.indexOf(newNote)
+    }
+
+    fun findNote(course: CourseInfo, noteTitle: String?, noteText: String?): NoteInfo? {
+
+        for(note in notes)
+            if (note.course == course && note.title == noteTitle && note.text == noteText)
+                return note
+
+        return null
     }
 
 }
