@@ -1,4 +1,4 @@
-package com.belemaogan.newnotekeeper.controllers
+package com.belemaogan.newnotekeeper
 
 import android.support.test.espresso.Espresso.*
 import android.support.test.espresso.action.ViewActions.click
@@ -6,8 +6,6 @@ import android.support.test.espresso.action.ViewActions.typeText
 import android.support.test.espresso.matcher.ViewMatchers.withId
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
-import com.belemaogan.newnotekeeper.DataManager
-import com.belemaogan.newnotekeeper.R
 import com.belemaogan.newnotekeeper.models.CourseInfo
 import org.hamcrest.CoreMatchers.*
 import org.junit.Assert.*
@@ -15,6 +13,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import android.support.test.espresso.action.ViewActions.closeSoftKeyboard
+import com.belemaogan.newnotekeeper.controllers.NoteListActivity
 
 /**
  * Created by Belema Ogan on 2/26/2019.
