@@ -26,6 +26,9 @@ class CreateNewNoteTest {
     @JvmField
     val mNotListActivity = ActivityTestRule(NoteListActivity::class.java)
 
+
+    //this test performs the process of adding a new note using the application and confirms that the
+    //note was created with the information selected and provided by the user
     @Test
     fun createNewNote(){
         val course = DataManager.courses["android_async"]
