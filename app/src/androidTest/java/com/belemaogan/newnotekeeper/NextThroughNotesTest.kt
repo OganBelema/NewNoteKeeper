@@ -4,11 +4,13 @@ import android.support.test.espresso.Espresso.onData
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions.click
 import android.support.test.espresso.assertion.ViewAssertions.matches
+import android.support.test.espresso.contrib.RecyclerViewActions
 import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import com.belemaogan.newnotekeeper.controllers.NoteListActivity
 import com.belemaogan.newnotekeeper.models.NoteInfo
+import com.belemaogan.newnotekeeper.views.NoteRecyclerAdapter
 import org.hamcrest.CoreMatchers.*
 import org.junit.Rule
 import org.junit.Test
@@ -29,9 +31,10 @@ class NextThroughNotesTest {
     //the test confirms the app's next through notes functionality works fine
     @Test
     fun nextThroughNotes(){
-        //code that performs the click action on the first item in the listview
+        //code that performs the click action on the first item in the recyclerview
         //notice we didn't have to call the onClick method first because it is not a spinner
-        onData(allOf(instanceOf(NoteInfo::class.java), equalTo(DataManager.notes[0]))).perform(click())
+        onView(withId(R.id.note_recycler_view))
+                .perform(RecyclerViewActions.actionOnItemAtPosition<NoteRecyclerAdapter.NoteItemViewHolder>(0, click()))
 
         //code that loops through the note list and clicks on the next action menu and checks the
         //the behaviour is what is expected
