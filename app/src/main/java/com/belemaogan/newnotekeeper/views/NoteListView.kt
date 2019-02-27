@@ -1,6 +1,8 @@
 package com.belemaogan.newnotekeeper.views
 
 import android.support.design.widget.FloatingActionButton
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
@@ -22,9 +24,11 @@ class NoteListView(inflater: LayoutInflater, parent: ViewGroup?) {
 
     val mRootView: View = inflater.inflate(R.layout.activity_note_list, parent, false)
 
+    private val mContext = mRootView.context
+
     val mToolbar: Toolbar
     private val mEditNoteButton: FloatingActionButton
-    val mNoteListView: ListView
+    val mNoteListView: RecyclerView
     private val mListeners = ArrayList<Listener>()
 
     fun registerListener(listener: Listener){
@@ -43,13 +47,11 @@ class NoteListView(inflater: LayoutInflater, parent: ViewGroup?) {
                 listener.onEditNoteButtonClicked()
             }
         }
-        mNoteListView = findViewById(R.id.listNotes)
+        mNoteListView = findViewById(R.id.note_recycler_view)
 
-        mNoteListView.setOnItemClickListener {_, _, position, _ ->
-            for (listener in mListeners){
-                listener.onNoteListItemClicked(position)
-            }
-        }
+        val linearLayoutManager = LinearLayoutManager(mContext)
+
+        mNoteListView.layoutManager = linearLayoutManager
     }
 
     private fun <T: View> findViewById(id: Int) : T {
@@ -57,6 +59,6 @@ class NoteListView(inflater: LayoutInflater, parent: ViewGroup?) {
     }
 
     fun populateNoteListView(adapter: ArrayAdapter<NoteInfo>){
-        mNoteListView.adapter = adapter
+        //mNoteListView.adapter = adapter
     }
 }
