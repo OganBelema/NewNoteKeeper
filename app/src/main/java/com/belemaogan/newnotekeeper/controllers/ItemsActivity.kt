@@ -12,17 +12,20 @@ import com.belemaogan.newnotekeeper.views.ItemsView
 
 class ItemsActivity : AppCompatActivity(), ItemsView.Listener {
 
-    private lateinit var mItemView: ItemsView
+    //lazy is used with val properties that you want their instantiation to be delayed till
+    //when they are first used
+    private val mItemView by lazy {
+        ItemsView(LayoutInflater.from(this), null)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mItemView = ItemsView(LayoutInflater.from(this), null)
 
         setSupportActionBar(mItemView.mToolbar)
 
         mItemView.setupToggle(this)
 
-        mItemView.populateNoteRecyclerView(DataManager.notes)
+        mItemView.displayNotes(DataManager.notes)
 
         mItemView.registerListener(this)
 
@@ -59,17 +62,11 @@ class ItemsActivity : AppCompatActivity(), ItemsView.Listener {
 
     override fun onDrawerItemClicked(id: Int) {
         when (id) {
-            R.id.nav_camera -> {
-                // Handle the camera action
+            R.id.nav_notes -> {
+                mItemView.displayNotes(DataManager.notes)
             }
-            R.id.nav_gallery -> {
-
-            }
-            R.id.nav_slideshow -> {
-
-            }
-            R.id.nav_manage -> {
-
+            R.id.nav_courses -> {
+                mItemView.displayCourses(DataManager.courses.values.toList())
             }
             R.id.nav_share -> {
 
@@ -83,7 +80,7 @@ class ItemsActivity : AppCompatActivity(), ItemsView.Listener {
 
     override fun onResume() {
         super.onResume()
-        mItemView.mNoteRecyclerView.adapter.notifyDataSetChanged()
+        mItemView.mRecyclerView.adapter.notifyDataSetChanged()
     }
 
     override fun onDestroy() {

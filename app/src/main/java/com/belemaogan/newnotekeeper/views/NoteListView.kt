@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.belemaogan.newnotekeeper.R
 import com.belemaogan.newnotekeeper.models.NoteInfo
+import com.belemaogan.newnotekeeper.views.adapters.NoteRecyclerAdapter
 
 /**
  * Created by Belema Ogan on 2/21/2019.
