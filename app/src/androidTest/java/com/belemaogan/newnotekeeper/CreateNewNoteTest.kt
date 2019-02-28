@@ -13,6 +13,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import android.support.test.espresso.action.ViewActions.closeSoftKeyboard
+import com.belemaogan.newnotekeeper.controllers.ItemsActivity
 import com.belemaogan.newnotekeeper.controllers.NoteListActivity
 
 /**
@@ -24,7 +25,7 @@ class CreateNewNoteTest {
     //code that starts up the activity for the test and closes it after test
     @Rule
     @JvmField
-    val mNotListActivity = ActivityTestRule(NoteListActivity::class.java)
+    val itemsActivity = ActivityTestRule(ItemsActivity::class.java)
 
 
     //this test performs the process of adding a new note using the application and confirms that the

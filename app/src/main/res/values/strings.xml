@@ -6,4 +6,8 @@
     <string name="title_activity_note_list">NoteListActivity</string>
     <string name="title_activity_edit_note">Edit Note</string>
     <string name="action_next_title">Next</string>
+    <string name="title_activity_main">NoteKeeper</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>
