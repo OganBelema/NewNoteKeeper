@@ -12,12 +12,13 @@ import com.belemaogan.newnotekeeper.ItemsActivityViewModel
 import com.belemaogan.newnotekeeper.R
 import com.belemaogan.newnotekeeper.models.NoteInfo
 import com.belemaogan.newnotekeeper.views.ItemsView
+import com.belemaogan.newnotekeeper.views.common.IItemsView
 
-class ItemsActivity : AppCompatActivity(), ItemsView.Listener {
+class ItemsActivity : AppCompatActivity(), IItemsView.Listener {
 
     //lazy is used with val properties that you want their instantiation to be delayed till
     //when they are first used
-    private val mItemView by lazy {
+    private val mItemView: IItemsView by lazy {
         ItemsView(LayoutInflater.from(this), null)
     }
 

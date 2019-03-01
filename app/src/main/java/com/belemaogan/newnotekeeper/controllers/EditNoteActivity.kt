@@ -14,20 +14,21 @@ import com.belemaogan.newnotekeeper.POSITION_NOT_SET
 import com.belemaogan.newnotekeeper.models.CourseInfo
 import com.belemaogan.newnotekeeper.models.NoteInfo
 import com.belemaogan.newnotekeeper.views.EditNoteView
-
+import com.belemaogan.newnotekeeper.views.common.IEditNoteView
 
 
 class EditNoteActivity : AppCompatActivity() {
 
     private val mTag = this::class.simpleName
 
-    private lateinit var mEditNoteView: EditNoteView
+    private val mEditNoteView: IEditNoteView by lazy {
+        EditNoteView(LayoutInflater.from(this), null)
+    }
 
     private var mNotePosition = POSITION_NOT_SET
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mEditNoteView = EditNoteView(LayoutInflater.from(this), null)
 
         setSupportActionBar(mEditNoteView.mToolbar)
 

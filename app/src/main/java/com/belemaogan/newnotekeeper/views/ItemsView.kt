@@ -18,40 +18,36 @@ import com.belemaogan.newnotekeeper.models.CourseInfo
 import com.belemaogan.newnotekeeper.models.NoteInfo
 import com.belemaogan.newnotekeeper.views.adapters.CourseRecyclerAdapter
 import com.belemaogan.newnotekeeper.views.adapters.NoteRecyclerAdapter
+import com.belemaogan.newnotekeeper.views.common.IItemsView
+
 
 /**
  * Created by Belema Ogan on 2/28/2019.
  */
-class ItemsView(layoutInflater: LayoutInflater, parent: ViewGroup?) : NoteRecyclerAdapter.Listener {
+class ItemsView(layoutInflater: LayoutInflater, parent: ViewGroup?) : NoteRecyclerAdapter.Listener, IItemsView {
 
-    interface Listener {
-        fun onEditNoteButtonClicked()
-        fun onDrawerItemClicked(id: Int)
-        fun onNoteItemClicked(note: NoteInfo)
-    }
-
-    fun registerListener(listener: Listener){
-        mListeners.add(listener)
-    }
-
-    fun unregisterListener(listener: Listener){
-        mListeners.remove(listener)
-    }
-
-    val mRootView: View = layoutInflater.inflate(R.layout.activity_items, parent, false)
+    override val mRootView: View = layoutInflater.inflate(R.layout.activity_items, parent, false)
 
     private val mDrawerLayout: DrawerLayout
     private val mNavigationView: NavigationView
     private val mContext = mRootView.context
 
-    val mToolbar: Toolbar
+    override val mToolbar: Toolbar
     private val mEditNoteButton: FloatingActionButton
-    val mRecyclerView: RecyclerView
+    override val mRecyclerView: RecyclerView
     private val mNoteLayoutManager = LinearLayoutManager(mContext)
     private val mNoteRecyclerAdapter = NoteRecyclerAdapter(mContext, this)
     private val mCourseLayoutManager = GridLayoutManager(mContext, 2)
     private val mCourseRecyclerAdapter = CourseRecyclerAdapter(mContext)
-    private val mListeners: MutableList<Listener> = ArrayList()
+    private val mListeners: MutableList<IItemsView.Listener> = ArrayList()
+
+    override fun registerListener(listener: IItemsView.Listener) {
+        mListeners.add(listener)
+    }
+
+    override fun unregisterListener(listener: IItemsView.Listener){
+        mListeners.remove(listener)
+    }
 
 
     init {
@@ -79,21 +75,21 @@ class ItemsView(layoutInflater: LayoutInflater, parent: ViewGroup?) : NoteRecycl
 
     private fun <T: View> findViewById(id: Int): T = mRootView.findViewById(id)
 
-    fun displayNotes(notes: List<NoteInfo>){
+    override fun displayNotes(notes: List<NoteInfo>){
         mRecyclerView.layoutManager = mNoteLayoutManager
         mRecyclerView.adapter = mNoteRecyclerAdapter
         mNoteRecyclerAdapter.addListOfNotes(notes)
         mNavigationView.menu.findItem(R.id.nav_notes).isChecked = true
     }
 
-    fun displayCourses(courses: List<CourseInfo>){
+    override fun displayCourses(courses: List<CourseInfo>){
         mRecyclerView.layoutManager = mCourseLayoutManager
         mRecyclerView.adapter = mCourseRecyclerAdapter
         mCourseRecyclerAdapter.addListOfCourses(courses)
         mNavigationView.menu.findItem(R.id.nav_courses).isChecked = true
     }
 
-    fun setupToggle(activity: Activity){
+    override fun setupToggle(activity: Activity){
         val toggle = ActionBarDrawerToggle(
                 activity, mDrawerLayout, mToolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close)
@@ -101,11 +97,11 @@ class ItemsView(layoutInflater: LayoutInflater, parent: ViewGroup?) : NoteRecycl
         toggle.syncState()
     }
 
-    fun isDrawerOpen(): Boolean{
+    override fun isDrawerOpen(): Boolean{
         return mDrawerLayout.isDrawerOpen(GravityCompat.START)
     }
 
-    fun closeDrawerView(){
+    override fun closeDrawerView(){
         mDrawerLayout.closeDrawer(GravityCompat.START)
     }
 

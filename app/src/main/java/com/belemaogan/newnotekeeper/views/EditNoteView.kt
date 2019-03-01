@@ -10,18 +10,20 @@ import android.widget.EditText
 import android.widget.Spinner
 import com.belemaogan.newnotekeeper.R
 import com.belemaogan.newnotekeeper.models.CourseInfo
+import com.belemaogan.newnotekeeper.views.common.IEditNoteView
+
 
 /**
  * Created by Belema Ogan on 2/21/2019.
  */
-class EditNoteView(inflater: LayoutInflater, parent: ViewGroup?){
+class EditNoteView(inflater: LayoutInflater, parent: ViewGroup?) : IEditNoteView {
 
-    val mRootView: View = inflater.inflate(R.layout.activity_edit_note, parent, false)
+    override val mRootView: View = inflater.inflate(R.layout.activity_edit_note, parent, false)
 
-    val mToolbar: Toolbar
-    val mCourseSpinner: Spinner
-    val mNoteTitleEditText: EditText
-    val mNoteTextEditText: EditText
+    override val mToolbar: Toolbar
+    override val mCourseSpinner: Spinner
+    override val mNoteTitleEditText: EditText
+    override val mNoteTextEditText: EditText
 
     init {
         mToolbar = findViewById(R.id.toolbar)
@@ -34,17 +36,17 @@ class EditNoteView(inflater: LayoutInflater, parent: ViewGroup?){
         return mRootView.findViewById(id)
     }
 
-    fun populateCourseSpinner(adapterCourses: ArrayAdapter<CourseInfo>) {
+    override fun populateCourseSpinner(adapterCourses: ArrayAdapter<CourseInfo>) {
         mCourseSpinner.adapter = adapterCourses
     }
 
-    fun populateView(coursePosition: Int, title: String?, text: String?) {
+    override fun populateView(coursePosition: Int, title: String?, text: String?) {
         mCourseSpinner.setSelection(coursePosition)
         mNoteTitleEditText.setText(title?:"No Title")
         mNoteTextEditText.setText(text?:"No Text")
     }
 
-    fun showMessageWithSnackbar(message: String){
+    override fun showMessageWithSnackbar(message: String){
         Snackbar.make(mRootView, message, Snackbar.LENGTH_LONG).show()
     }
 
