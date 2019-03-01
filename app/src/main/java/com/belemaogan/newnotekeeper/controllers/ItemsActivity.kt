@@ -34,6 +34,14 @@ class ItemsActivity : AppCompatActivity(), ItemsView.Listener {
 
         mItemView.setupToggle(this)
 
+        //this is to restore the state when the activity is destroyed in a case of system-initiated
+        // shutdown
+        if (savedInstanceState != null){
+            mItemsActivityViewModel.navigationDrawerDisplaySelection =
+                    savedInstanceState.getInt(
+                            mItemsActivityViewModel.navigationDrawerViewDisplaySelectionName)
+        }
+
        handleDisplaySelection(mItemsActivityViewModel.navigationDrawerDisplaySelection)
 
         mItemView.registerListener(this)
@@ -116,5 +124,14 @@ class ItemsActivity : AppCompatActivity(), ItemsView.Listener {
         mItemsActivityViewModel.addToRecentlyViewedNotes(note)
     }
 
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        //this saves the selected navigation drawer option  before the activity is destroyed
+        // so it can be restored when the onCreate method is called
+        if (outState != null){
+            outState.putInt(mItemsActivityViewModel.navigationDrawerViewDisplaySelectionName,
+                    mItemsActivityViewModel.navigationDrawerDisplaySelection)
+        }
+    }
 
 }

@@ -8,6 +8,9 @@ import com.belemaogan.newnotekeeper.models.NoteInfo
  */
 class ItemsActivityViewModel: ViewModel() {
 
+    val navigationDrawerViewDisplaySelectionName =
+            "com.belemaogan.newnotekeeper.ItemsActivityViewModel.navigationDrawerViewDisplaySelectionName"
+
     var navigationDrawerDisplaySelection = R.id.nav_notes
 
     private val mMaxRecentlyViewedNotes = 5
