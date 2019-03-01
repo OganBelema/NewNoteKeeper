@@ -36,11 +36,12 @@ class ItemsActivity : AppCompatActivity(), ItemsView.Listener {
 
         //this is to restore the state when the activity is destroyed in a case of system-initiated
         // shutdown
-        if (savedInstanceState != null){
-            mItemsActivityViewModel.navigationDrawerDisplaySelection =
-                    savedInstanceState.getInt(
-                            mItemsActivityViewModel.navigationDrawerViewDisplaySelectionName)
+        if (mItemsActivityViewModel.isNewlyCreated && savedInstanceState != null){
+            mItemsActivityViewModel.restoreState(savedInstanceState)
         }
+
+        //this way the view model's isNewlyCreated property is only true when it is created
+        mItemsActivityViewModel.isNewlyCreated = false
 
        handleDisplaySelection(mItemsActivityViewModel.navigationDrawerDisplaySelection)
 
@@ -129,8 +130,7 @@ class ItemsActivity : AppCompatActivity(), ItemsView.Listener {
         //this saves the selected navigation drawer option  before the activity is destroyed
         // so it can be restored when the onCreate method is called
         if (outState != null){
-            outState.putInt(mItemsActivityViewModel.navigationDrawerViewDisplaySelectionName,
-                    mItemsActivityViewModel.navigationDrawerDisplaySelection)
+            mItemsActivityViewModel.saveState(outState)
         }
     }
 

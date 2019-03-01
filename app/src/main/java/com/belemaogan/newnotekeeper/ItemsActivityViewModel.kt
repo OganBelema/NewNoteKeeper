@@ -1,6 +1,7 @@
 package com.belemaogan.newnotekeeper
 
 import android.arch.lifecycle.ViewModel
+import android.os.Bundle
 import com.belemaogan.newnotekeeper.models.NoteInfo
 
 /**
@@ -8,8 +9,12 @@ import com.belemaogan.newnotekeeper.models.NoteInfo
  */
 class ItemsActivityViewModel: ViewModel() {
 
-    val navigationDrawerViewDisplaySelectionName =
+    var isNewlyCreated = true
+
+    private val navigationDrawerViewDisplaySelectionName =
             "com.belemaogan.newnotekeeper.ItemsActivityViewModel.navigationDrawerViewDisplaySelectionName"
+    private val recentlyViewedNoteIdsName =
+            "com.belemaogan.newnotekeeper.ItemsActivityViewModel.recentlyViewedNoteIdsName"
 
     var navigationDrawerDisplaySelection = R.id.nav_notes
 
@@ -36,5 +41,25 @@ class ItemsActivityViewModel: ViewModel() {
             }
             mRecentlyViewedNotes[0] = note
         }
+    }
+
+    fun saveState(outState: Bundle) {
+        outState.putInt(navigationDrawerViewDisplaySelectionName,
+                navigationDrawerDisplaySelection)
+
+        val noteIds = DataManager.noteIdsAsIntArray(mRecentlyViewedNotes)
+        outState.putIntArray(recentlyViewedNoteIdsName, noteIds)
+    }
+
+    fun restoreState(savedInstanceState: Bundle) {
+        navigationDrawerDisplaySelection =
+                savedInstanceState.getInt(navigationDrawerViewDisplaySelectionName)
+
+        val noteIds = savedInstanceState.getIntArray(recentlyViewedNoteIdsName)
+
+        //DataManager.loadNotes method accepts a vararg but what we have is an int array
+        //the * before the noteIds is a spread operator that expands the int array into a vararg
+        val noteList = DataManager.loadNotes(*noteIds)
+        mRecentlyViewedNotes.addAll(noteList)
     }
 }
