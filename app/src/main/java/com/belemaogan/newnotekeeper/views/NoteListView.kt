@@ -14,7 +14,10 @@ import com.belemaogan.newnotekeeper.views.adapters.NoteRecyclerAdapter
 /**
  * Created by Belema Ogan on 2/21/2019.
  */
-class NoteListView(inflater: LayoutInflater, parent: ViewGroup?) {
+class NoteListView(inflater: LayoutInflater, parent: ViewGroup?) : NoteRecyclerAdapter.Listener {
+    override fun onNoteSelected(note: NoteInfo) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     interface Listener {
         fun onEditNoteButtonClicked()
@@ -52,7 +55,7 @@ class NoteListView(inflater: LayoutInflater, parent: ViewGroup?) {
 
         mNoteRecyclerView.layoutManager = linearLayoutManager
 
-        mNoteRecyclerAdapter = NoteRecyclerAdapter(mContext)
+        mNoteRecyclerAdapter = NoteRecyclerAdapter(mContext, this)
 
         mNoteRecyclerView.adapter = mNoteRecyclerAdapter
     }

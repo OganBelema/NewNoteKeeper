@@ -22,11 +22,12 @@ import com.belemaogan.newnotekeeper.views.adapters.NoteRecyclerAdapter
 /**
  * Created by Belema Ogan on 2/28/2019.
  */
-class ItemsView(layoutInflater: LayoutInflater, parent: ViewGroup?) {
+class ItemsView(layoutInflater: LayoutInflater, parent: ViewGroup?) : NoteRecyclerAdapter.Listener {
 
     interface Listener {
         fun onEditNoteButtonClicked()
         fun onDrawerItemClicked(id: Int)
+        fun onNoteItemClicked(note: NoteInfo)
     }
 
     fun registerListener(listener: Listener){
@@ -47,7 +48,7 @@ class ItemsView(layoutInflater: LayoutInflater, parent: ViewGroup?) {
     private val mEditNoteButton: FloatingActionButton
     val mRecyclerView: RecyclerView
     private val mNoteLayoutManager = LinearLayoutManager(mContext)
-    private val mNoteRecyclerAdapter = NoteRecyclerAdapter(mContext)
+    private val mNoteRecyclerAdapter = NoteRecyclerAdapter(mContext, this)
     private val mCourseLayoutManager = GridLayoutManager(mContext, 2)
     private val mCourseRecyclerAdapter = CourseRecyclerAdapter(mContext)
     private val mListeners: MutableList<Listener> = ArrayList()
@@ -106,6 +107,12 @@ class ItemsView(layoutInflater: LayoutInflater, parent: ViewGroup?) {
 
     fun closeDrawerView(){
         mDrawerLayout.closeDrawer(GravityCompat.START)
+    }
+
+    override fun onNoteSelected(note: NoteInfo) {
+        for (listener in mListeners){
+            listener.onNoteItemClicked(note)
+        }
     }
 
 }

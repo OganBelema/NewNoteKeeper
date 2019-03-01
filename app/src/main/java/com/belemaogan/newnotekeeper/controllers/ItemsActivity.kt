@@ -1,5 +1,6 @@
 package com.belemaogan.newnotekeeper.controllers
 
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -7,7 +8,9 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import com.belemaogan.newnotekeeper.DataManager
+import com.belemaogan.newnotekeeper.ItemsActivityViewModel
 import com.belemaogan.newnotekeeper.R
+import com.belemaogan.newnotekeeper.models.NoteInfo
 import com.belemaogan.newnotekeeper.views.ItemsView
 
 class ItemsActivity : AppCompatActivity(), ItemsView.Listener {
@@ -18,6 +21,12 @@ class ItemsActivity : AppCompatActivity(), ItemsView.Listener {
         ItemsView(LayoutInflater.from(this), null)
     }
 
+    private val mItemsActivityViewModel by lazy {
+        ViewModelProviders.of(this)[ItemsActivityViewModel::class.java]
+    }
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -25,7 +34,7 @@ class ItemsActivity : AppCompatActivity(), ItemsView.Listener {
 
         mItemView.setupToggle(this)
 
-        mItemView.displayNotes(DataManager.notes)
+       handleDisplaySelection(mItemsActivityViewModel.navigationDrawerDisplaySelection)
 
         mItemView.registerListener(this)
 
@@ -62,11 +71,11 @@ class ItemsActivity : AppCompatActivity(), ItemsView.Listener {
 
     override fun onDrawerItemClicked(id: Int) {
         when (id) {
-            R.id.nav_notes -> {
-                mItemView.displayNotes(DataManager.notes)
-            }
-            R.id.nav_courses -> {
-                mItemView.displayCourses(DataManager.courses.values.toList())
+            R.id.nav_notes,
+            R.id.nav_courses,
+            R.id.nav_recently_viewed_notes -> {
+                handleDisplaySelection(id)
+                mItemsActivityViewModel.navigationDrawerDisplaySelection = id
             }
             R.id.nav_share -> {
 
@@ -78,6 +87,21 @@ class ItemsActivity : AppCompatActivity(), ItemsView.Listener {
 
     }
 
+
+    private fun handleDisplaySelection(itemId: Int){
+        when(itemId){
+            R.id.nav_notes -> {
+                mItemView.displayNotes(DataManager.notes)
+            }
+            R.id.nav_courses -> {
+                mItemView.displayCourses(DataManager.courses.values.toList())
+            }
+            R.id.nav_recently_viewed_notes -> {
+                mItemView.displayNotes(mItemsActivityViewModel.mRecentlyViewedNotes)
+            }
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         mItemView.mRecyclerView.adapter.notifyDataSetChanged()
@@ -87,4 +111,10 @@ class ItemsActivity : AppCompatActivity(), ItemsView.Listener {
         super.onDestroy()
         mItemView.unregisterListener(this)
     }
+
+    override fun onNoteItemClicked(note: NoteInfo) {
+        mItemsActivityViewModel.addToRecentlyViewedNotes(note)
+    }
+
+
 }

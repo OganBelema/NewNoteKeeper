@@ -15,12 +15,17 @@ import com.belemaogan.newnotekeeper.models.NoteInfo
 /**
  * Created by Belema Ogan on 2/27/2019.
  */
-class NoteRecyclerAdapter(private val context: Context) :
+class NoteRecyclerAdapter(private val context: Context, private val listener: Listener) :
         RecyclerView.Adapter<NoteRecyclerAdapter.NoteItemViewHolder>() {
+
+    interface Listener {
+        fun onNoteSelected(note: NoteInfo)
+    }
 
     private val mLayoutInflater = LayoutInflater.from(context)
 
     private var mNotes: List<NoteInfo> = ArrayList(1)
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteItemViewHolder {
         val itemView = mLayoutInflater.inflate(R.layout.item_note_list, parent, false)
@@ -35,6 +40,7 @@ class NoteRecyclerAdapter(private val context: Context) :
         holder.noteTitleTextView?.text = note.title
 
         holder.itemView.setOnClickListener {
+            listener.onNoteSelected(note)
             //the key NOTE_POSITION is from my Constant file, it helps to prevent me from making
             //an error in the spelling which will introduce bugs
             val intent = Intent(context, EditNoteActivity::class.java)
