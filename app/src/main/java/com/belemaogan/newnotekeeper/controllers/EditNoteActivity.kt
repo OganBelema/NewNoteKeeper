@@ -7,10 +7,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
-import com.belemaogan.newnotekeeper.R
-import com.belemaogan.newnotekeeper.DataManager
-import com.belemaogan.newnotekeeper.NOTE_POSITION
-import com.belemaogan.newnotekeeper.POSITION_NOT_SET
+import com.belemaogan.newnotekeeper.*
 import com.belemaogan.newnotekeeper.models.CourseInfo
 import com.belemaogan.newnotekeeper.models.NoteInfo
 import com.belemaogan.newnotekeeper.views.EditNoteView
@@ -26,6 +23,8 @@ class EditNoteActivity : AppCompatActivity() {
     }
 
     private var mNotePosition = POSITION_NOT_SET
+
+    val mNoteGetTogetherHelper = NoteGetTogetherHelper(this, lifecycle)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,9 +114,9 @@ class EditNoteActivity : AppCompatActivity() {
     }
 
     override fun onPause() {
-        super.onPause()
         saveNote()
         Log.d(mTag, "onPause")
+        super.onPause()
     }
 
     private fun saveNote() {
