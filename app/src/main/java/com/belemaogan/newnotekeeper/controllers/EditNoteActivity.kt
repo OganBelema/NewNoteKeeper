@@ -101,7 +101,11 @@ class EditNoteActivity : AppCompatActivity() {
                     val message = "No more notes"
                     mEditNoteView.showMessageWithSnackbar(message)
                 }
-                return true
+                true
+            }
+            R.id.action_get_together -> {
+                mNoteGetTogetherHelper.sendMessage(DataManager.loadNote(mNotePosition))
+                true
             }
             else -> super.onOptionsItemSelected(item)
         }
