@@ -16,7 +16,7 @@ import com.belemaogan.newnotekeeper.views.adapters.NoteRecyclerAdapter
  */
 class NoteListView(inflater: LayoutInflater, parent: ViewGroup?) : NoteRecyclerAdapter.Listener {
     override fun onNoteSelected(note: NoteInfo) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
     interface Listener {
@@ -44,7 +44,7 @@ class NoteListView(inflater: LayoutInflater, parent: ViewGroup?) : NoteRecyclerA
     init {
         mToolbar = findViewById(R.id.toolbar)
         mEditNoteButton = findViewById(R.id.fab)
-        mEditNoteButton.setOnClickListener { _ ->
+        mEditNoteButton.setOnClickListener {
             for (listener in mListeners){
                 listener.onEditNoteButtonClicked()
             }

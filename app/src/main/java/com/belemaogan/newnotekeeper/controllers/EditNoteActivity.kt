@@ -1,6 +1,7 @@
 package com.belemaogan.newnotekeeper.controllers
 
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.LayoutInflater
@@ -24,7 +25,7 @@ class EditNoteActivity : AppCompatActivity() {
 
     private var mNotePosition = POSITION_NOT_SET
 
-    val mNoteGetTogetherHelper = NoteGetTogetherHelper(this, lifecycle)
+    private val mNoteGetTogetherHelper = NoteGetTogetherHelper(this, lifecycle)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,7 +76,7 @@ class EditNoteActivity : AppCompatActivity() {
         if (mNotePosition >= DataManager.notes.lastIndex){
             val menuItem = menu?.findItem(R.id.action_next)
             if (menuItem != null){
-                menuItem.icon = resources.getDrawable(R.drawable.ic_block_white_24dp)
+                menuItem.icon = ContextCompat.getDrawable(this, R.drawable.ic_block_white_24dp)
             }
 
         }
