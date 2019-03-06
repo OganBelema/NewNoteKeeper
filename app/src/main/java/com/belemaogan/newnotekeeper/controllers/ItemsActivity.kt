@@ -88,10 +88,15 @@ class ItemsActivity : AppCompatActivity(), IItemsView.Listener {
                 mItemsActivityViewModel.navigationDrawerDisplaySelection = id
             }
             R.id.nav_share -> {
-
+                mItemView.showSnackbarWithMessage(getString(R.string.nav_share_message))
             }
             R.id.nav_send -> {
-
+                mItemView.showSnackbarWithMessage(getString(R.string.nav_send_message))
+            }
+            R.id.nav_how_many -> {
+                val message = getString(R.string.nav_how_many_message_format, DataManager.notes.size,
+                        DataManager.courses.size)
+                mItemView.showSnackbarWithMessage(message)
             }
         }
 

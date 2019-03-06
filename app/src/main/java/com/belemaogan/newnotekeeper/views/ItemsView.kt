@@ -3,6 +3,7 @@ package com.belemaogan.newnotekeeper.views
 import android.app.Activity
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.NavigationView
+import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
@@ -37,7 +38,7 @@ class ItemsView(layoutInflater: LayoutInflater, parent: ViewGroup?) : NoteRecycl
     override val mRecyclerView: RecyclerView
     private val mNoteLayoutManager = LinearLayoutManager(mContext)
     private val mNoteRecyclerAdapter = NoteRecyclerAdapter(mContext, this)
-    private val mCourseLayoutManager = GridLayoutManager(mContext, 2)
+    private val mCourseLayoutManager = GridLayoutManager(mContext, mContext.resources.getInteger(R.integer.course_grid_span))
     private val mCourseRecyclerAdapter = CourseRecyclerAdapter(mContext)
     private val mListeners: MutableList<IItemsView.Listener> = ArrayList()
 
@@ -95,6 +96,11 @@ class ItemsView(layoutInflater: LayoutInflater, parent: ViewGroup?) : NoteRecycl
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         mDrawerLayout.addDrawerListener(toggle)
         toggle.syncState()
+    }
+
+    override fun showSnackbarWithMessage(message: String) {
+        Snackbar.make(mRootView, message, Snackbar.LENGTH_LONG)
+                .show()
     }
 
     override fun isDrawerOpen(): Boolean{

@@ -25,6 +25,7 @@ interface IItemsView {
     fun unregisterListener(listener: Listener)
     fun displayNotes(notes: List<NoteInfo>)
     fun displayCourses(courses: List<CourseInfo>)
+    fun showSnackbarWithMessage(message: String)
     fun setupToggle(activity: Activity)
     fun isDrawerOpen(): Boolean
     fun closeDrawerView()
