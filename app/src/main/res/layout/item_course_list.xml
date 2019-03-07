@@ -39,7 +39,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:textAlignment="center"
-                android:textAppearance="@style/course_title"
+                android:textAppearance="@style/CourseTitle"
                 android:textSize="@dimen/course_name_size"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
