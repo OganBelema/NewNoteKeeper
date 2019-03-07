@@ -1,5 +1,7 @@
 package com.belemaogan.newnotekeeper.models
 
+import android.graphics.Color
+
 /**
  * Created by Belema Ogan on 2/21/2019.
  */
@@ -9,4 +11,5 @@ data class CourseInfo(val courseId: String, val title: String) {
     }
 }
 
-data class NoteInfo(var course: CourseInfo? = null, var title: String? = null, var text: String? = null)
+data class NoteInfo(var course: CourseInfo? = null, var title: String? = null, var text: String? = null,
+                    var color: Int = Color.TRANSPARENT)

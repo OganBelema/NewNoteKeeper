@@ -5,4 +5,14 @@
     <string name="note_title">Titulo de la nota</string>
     <string name="title_activity_edit_note">Editar Nota</string>
     <string name="nav_how_many_message_format">Notas: %1$d | Cursos: %2$d</string>
+
+    <string-array name="note_color_array">
+        <item>#E57373</item>
+        <item>#BA68C8</item>
+        <item>#64B5F6</item>
+        <item>#81C784</item>
+        <item>#FFF176</item>
+        <item>#FFB74D</item>
+        <item>#90A4AE</item>
+    </string-array>
 </resources>

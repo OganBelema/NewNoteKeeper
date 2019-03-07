@@ -38,6 +38,7 @@ class NoteRecyclerAdapter(private val context: Context, private val listener: Li
         val note = mNotes[position]
         holder.courseTitleTextView?.text = note.course?.title
         holder.noteTitleTextView?.text = note.title
+        holder.colorView?.setBackgroundColor(note.color)
 
         holder.itemView.setOnClickListener {
             listener.onNoteSelected(note)
@@ -57,5 +58,6 @@ class NoteRecyclerAdapter(private val context: Context, private val listener: Li
     class NoteItemViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
         val courseTitleTextView = itemView?.findViewById<TextView?>(R.id.text_course)
         val noteTitleTextView = itemView?.findViewById<TextView?>(R.id.text_title)
+        val colorView = itemView?.findViewById<View>(R.id.noteColor)
     }
 }

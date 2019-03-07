@@ -1,5 +1,6 @@
 package com.belemaogan.newnotekeeper.controllers
 
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
@@ -15,7 +16,8 @@ import com.belemaogan.newnotekeeper.views.EditNoteView
 import com.belemaogan.newnotekeeper.views.common.IEditNoteView
 
 
-class EditNoteActivity : AppCompatActivity() {
+class EditNoteActivity : AppCompatActivity(), IEditNoteView.Listener {
+
 
     private val mTag = this::class.simpleName
 
@@ -24,6 +26,8 @@ class EditNoteActivity : AppCompatActivity() {
     }
 
     private var mNotePosition = POSITION_NOT_SET
+
+    private var mNoteColor = Color.TRANSPARENT
 
     private val mNoteGetTogetherHelper = NoteGetTogetherHelper(this, lifecycle)
 
@@ -49,7 +53,13 @@ class EditNoteActivity : AppCompatActivity() {
 
         Log.d(mTag, "onCreate")
 
+        mEditNoteView.registerListener(this)
+
         setContentView(mEditNoteView.mRootView)
+    }
+
+    override fun onColorSelected(color: Int) {
+        mNoteColor = color
     }
 
     private fun createNewNote() {
@@ -69,7 +79,8 @@ class EditNoteActivity : AppCompatActivity() {
 
         val note = DataManager.notes[mNotePosition]
         val coursePosition = DataManager.courses.values.indexOf(note.course)
-        mEditNoteView.populateView(coursePosition, note.title, note.text)
+        mNoteColor = note.color
+        mEditNoteView.populateView(coursePosition, note.title, note.text, note.color)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
@@ -129,11 +140,17 @@ class EditNoteActivity : AppCompatActivity() {
         note.title = mEditNoteView.mNoteTitleEditText.text.toString()
         note.text = mEditNoteView.mNoteTextEditText.text.toString()
         note.course = mEditNoteView.mCourseSpinner.selectedItem as CourseInfo
+        note.color = mNoteColor
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
         outState?.putInt(NOTE_POSITION, mNotePosition)
+    }
+
+    override fun onDestroy() {
+        mEditNoteView.unregisterListener(this)
+        super.onDestroy()
     }
 
 }
