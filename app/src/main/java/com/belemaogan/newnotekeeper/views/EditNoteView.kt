@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Spinner
+import com.belemaogan.newnotekeeper.ColorDialView
 import com.belemaogan.newnotekeeper.ColorSelector
 import com.belemaogan.newnotekeeper.ColorSlider
 import com.belemaogan.newnotekeeper.R
@@ -26,7 +27,7 @@ class EditNoteView(inflater: LayoutInflater, parent: ViewGroup?) : IEditNoteView
     override val mCourseSpinner: Spinner
     override val mNoteTitleEditText: EditText
     override val mNoteTextEditText: EditText
-    private val mColorSelectorView: ColorSlider
+    private val mColorSelectorView: ColorDialView
     private val mListeners: MutableList<IEditNoteView.Listener> = ArrayList()
 
     override fun registerListener(listener: IEditNoteView.Listener) {
