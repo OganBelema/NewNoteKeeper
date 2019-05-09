@@ -6,14 +6,12 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
-import android.support.annotation.StyleRes
-import android.text.TextPaint
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
 
 /**
- * 
+ *
  */
 class ColorDialView @JvmOverloads constructor(context: Context,
                                               attrs: AttributeSet? = null,
@@ -31,10 +29,13 @@ class ColorDialView @JvmOverloads constructor(context: Context,
         it.isAntiAlias = true
     }
 
-    private var dialMeter = toDP(100)
+    private var dialDiameter = toDP(100)
     private var extraPadding = toDP(30)
     private var tickSize = toDP(10).toFloat()
     private var angleBetweenColors = 0f
+    private var scaleToFit = false
+    private var scale = 1f
+    private var tickSizeScaled = tickSize * scale
 
     //precomputed padding values
     private var totalLeftPadding = 0f
@@ -52,8 +53,28 @@ class ColorDialView @JvmOverloads constructor(context: Context,
     private var centerVertical = 0f
 
     init {
+        val typedArray = context.obtainStyledAttributes(attrs, R.styleable.ColorDialView)
+        try {
+            val customColors = typedArray.getTextArray(R.styleable.ColorDialView_colors)?.map {
+                Color.parseColor(it.toString())
+            } as ArrayList<Int>?
+            customColors?.let {
+                colors = customColors
+            }
+            dialDiameter = typedArray.getDimension(R.styleable.ColorDialView_dialDiameter,
+                    toDP(100).toFloat()).toInt()
+            extraPadding = typedArray.getDimension(R.styleable.ColorDialView_tickPadding,
+                    toDP(30).toFloat()).toInt()
+            tickSize = typedArray.getDimension(R.styleable.ColorDialView_tickRadius,
+                    toDP(10).toFloat())
+            scaleToFit = typedArray.getBoolean(R.styleable.ColorDialView_scaleToFit,
+                    false)
+        } finally {
+            typedArray.recycle()
+        }
+
         dialDrawable = context.getDrawable(R.drawable.ic_dial).also {
-            it?.bounds = getCenteredBounds(dialMeter)
+            it?.bounds = getCenteredBounds(dialDiameter)
             it?.setTint(Color.DKGRAY)
         }
         noColorDrawable = context.getDrawable(R.drawable.ic_no_color).also {
@@ -61,7 +82,8 @@ class ColorDialView @JvmOverloads constructor(context: Context,
         }
         colors.add(0, Color.TRANSPARENT)
         angleBetweenColors = 360f / colors.size
-        refreshValues()
+
+        refreshValues(true)
     }
 
     private fun getCenteredBounds(size: Int, scalar: Float = 1f): Rect {
@@ -69,9 +91,47 @@ class ColorDialView @JvmOverloads constructor(context: Context,
         return Rect(-half, -half, half, half)
     }
 
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+
+        if (scaleToFit) {
+            refreshValues(false)
+            val specWidth = MeasureSpec.getSize(widthMeasureSpec)
+            val specHeight = MeasureSpec.getSize(heightMeasureSpec)
+            val workingWidth = specWidth - paddingLeft - paddingRight
+            val workingHeight = specHeight - paddingTop - paddingBottom
+            scale = if (workingWidth < workingHeight) {
+                (workingWidth) / (horizontalSize - paddingLeft - paddingRight)
+            } else {
+                (workingHeight) / (verticalSize - paddingTop - paddingBottom)
+            }
+            dialDrawable?.let {
+                it.bounds = getCenteredBounds((dialDiameter * scale).toInt())
+            }
+            noColorDrawable?.let {
+                it.bounds = getCenteredBounds((tickSize * scale).toInt(), 2f)
+            }
+            val width = resolveSizeAndState((horizontalSize * scale).toInt(),
+                    widthMeasureSpec,
+                    0)
+            val height = resolveSizeAndState((verticalSize * scale).toInt(),
+                    heightMeasureSpec,
+                    0)
+            refreshValues(true)
+            setMeasuredDimension(width, height)
+        } else {
+            val width = resolveSizeAndState(horizontalSize.toInt(),
+                    widthMeasureSpec,
+                    0)
+            val height = resolveSizeAndState(verticalSize.toInt(),
+                    heightMeasureSpec,
+                    0)
+            setMeasuredDimension(width, height)
+        }
+    }
+
     override fun onDraw(canvas: Canvas) {
         val saveCount = canvas.save()
-        colors.forEachIndexed { index, color ->
+        colors.forEachIndexed { index, _ ->
             if (index == 0){
                 canvas.translate(centerHorizontal, tickPositionVertical)
                 noColorDrawable?.draw(canvas)
@@ -80,7 +140,7 @@ class ColorDialView @JvmOverloads constructor(context: Context,
                 paint.color = colors[index]
                 canvas.drawCircle(centerHorizontal,
                         tickPositionVertical,
-                        tickSize,
+                        tickSizeScaled,
                         paint)
             }
             canvas.rotate(angleBetweenColors, centerHorizontal, centerVertical)
@@ -91,23 +151,28 @@ class ColorDialView @JvmOverloads constructor(context: Context,
 
     }
 
-    private fun refreshValues(){
+    private fun refreshValues(withScale: Boolean){
+        val localScale = if (withScale) scale else 1f
+
         //compute padding values
-        this.totalLeftPadding = (paddingLeft + extraPadding).toFloat()
-        this.totalTopPadding = (paddingTop + extraPadding).toFloat()
-        this.totalRightPadding = (paddingRight + extraPadding).toFloat()
-        this.totalBottomPadding = (paddingBottom + extraPadding).toFloat()
+        this.totalLeftPadding = (paddingLeft + extraPadding).toFloat() * localScale
+        this.totalTopPadding = (paddingTop + extraPadding).toFloat() * localScale
+        this.totalRightPadding = (paddingRight + extraPadding).toFloat() * localScale
+        this.totalBottomPadding = (paddingBottom + extraPadding).toFloat() * localScale
 
         //compute helper values
-        this.horizontalSize = paddingLeft + paddingRight + (extraPadding * 2) + dialMeter.toFloat()
-        this.verticalSize = paddingTop + paddingBottom + (extraPadding * 2) + dialMeter.toFloat()
+        this.horizontalSize = paddingLeft + paddingRight + (extraPadding * localScale * 2) +
+                dialDiameter.toFloat() * localScale
+        this.verticalSize = paddingTop + paddingBottom + (extraPadding * localScale * 2) +
+                dialDiameter.toFloat() * localScale
 
         //compute position values
-        this.tickPositionVertical = paddingTop + extraPadding / 2f
+        this.tickPositionVertical = paddingTop + extraPadding * localScale / 2f
         this.centerHorizontal = totalLeftPadding +
                 (horizontalSize - totalLeftPadding - totalRightPadding) / 2f
         this.centerVertical = totalTopPadding +
                 (verticalSize - totalTopPadding - totalBottomPadding) / 2f
+        this.tickSizeScaled = tickSize * localScale
     }
 
     private fun toDP(value: Int): Int {
